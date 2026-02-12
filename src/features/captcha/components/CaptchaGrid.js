@@ -35,14 +35,41 @@ export default function CaptchaGrid({ size = 4 }) {
     }
   };
 
-  // ✅ dataUrl -> 다운로드
-  const downloadDataUrl = (dataUrl, filename) => {
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+  const [uploadStatus, setUploadStatus] = useState("");
+
+  const blobUrlToDataUrl = async (blobUrl) => {
+    const blob = await fetch(blobUrl).then((r) => r.blob());
+    const result = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+    if (typeof result !== "string") {
+      throw new Error("Failed to convert image payload");
+    }
+    return result;
+  };
+
+  const uploadCapture = async ({ index, blobUrl, filename }) => {
+    const dataUrl = await blobUrlToDataUrl(blobUrl);
+
+    const res = await fetch("/api/capture-upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename,
+        dataUrl,
+        cellIndex: index + 1,
+      }),
+    });
+
+    const json = await res.json();
+    if (!res.ok) {
+      throw new Error(json?.detail || json?.error || "Upload failed");
+    }
+
+    return json;
   };
 
   // ✅ 파일명 규칙: non-com_cell-05_20260203-152045.png
@@ -61,13 +88,22 @@ export default function CaptchaGrid({ size = 4 }) {
     return `non-com_cell-${cell}_${yyyy}${mm}${dd}-${hh}${mi}${ss}.png`;
   };
 
-  const handleCaptured = (index, dataUrl) => {
+  const handleCaptured = async (index, blobUrl) => {
     // ✅ 이미 다운로드 했으면 무시 (한 번만)
     if (downloadedRef.current.has(index)) return;
 
     downloadedRef.current.add(index);
     const filename = makeFilename(index);
-    downloadDataUrl(dataUrl, filename);
+
+    setUploadStatus(`셀 ${index + 1} 업로드 중...`);
+
+    try {
+      const result = await uploadCapture({ index, blobUrl, filename });
+      setUploadStatus(`셀 ${index + 1} 업로드 완료: ${result.path}`);
+    } catch (error) {
+      downloadedRef.current.delete(index);
+      setUploadStatus(`셀 ${index + 1} 업로드 실패: ${error.message}`);
+    }
   };
 
   return (
@@ -91,6 +127,11 @@ export default function CaptchaGrid({ size = 4 }) {
           />
         ))}
       </div>
+      {uploadStatus ? (
+        <p style={{ margin: "12px auto 0", width: "min(520px, 100%)", fontSize: 13, opacity: 0.75 }}>
+          {uploadStatus}
+        </p>
+      ) : null}
     </section>
   );
 }
