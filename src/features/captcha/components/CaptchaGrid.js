@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import CaptchaCell from "./CaptchaCell";
+import DelayedMessage from "./DelayedMessage";
+import { PREVIEW_DELAYED_MESSAGES } from "../constants/messages";
 
 export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const cells = useMemo(
@@ -11,7 +13,6 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const [captureNonce, setCaptureNonce] = useState(0);
   const [captureTarget, setCaptureTarget] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [showTestText, setShowTestText] = useState(false);
 
   // ✅ "한 번만" 다운로드 보장: index별로 이미 저장했는지 기억
   const downloadedRef = useRef(new Set());
@@ -38,20 +39,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   };
 
   const [uploadStatus, setUploadStatus] = useState("");
-
-  useEffect(() => {
-    if (!preview?.dataUrl || !previewLabel) {
-      setShowTestText(false);
-      return;
-    }
-
-    setShowTestText(false);
-    const timer = setTimeout(() => {
-      setShowTestText(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [preview?.dataUrl, previewLabel]);
+  const delayedPreviewText = PREVIEW_DELAYED_MESSAGES[0] || "";
 
   const blobUrlToDataUrl = async (blobUrl) => {
     const blob = await fetch(blobUrl).then((r) => r.blob());
@@ -183,17 +171,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
             >
               {previewLabel ? `[${previewLabel}]` : ""}
             </p>
-            <p
-              style={{
-                margin: "6px 0 0",
-                fontSize: 12,
-                opacity: showTestText ? 0.8 : 0,
-                textAlign: "center",
-                transition: "opacity 420ms ease",
-              }}
-            >
-              테스트
-            </p>
+            <DelayedMessage text={delayedPreviewText} triggerKey={preview.dataUrl} delayMs={3000} fadeMs={420} />
           </>
         ) : (
           uploadStatus ? <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>{uploadStatus}</p> : null
