@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import CaptchaCell from "./CaptchaCell";
 
-export default function CaptchaGrid({ size = 4 }) {
+export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const cells = useMemo(
     () => Array.from({ length: size * size }, (_, i) => i),
     [size]
@@ -104,7 +104,6 @@ export default function CaptchaGrid({ size = 4 }) {
       setPreview({
         index,
         dataUrl: result.dataUrl,
-        path: result.path,
       });
     } catch (error) {
       downloadedRef.current.delete(index);
@@ -159,13 +158,11 @@ export default function CaptchaGrid({ size = 4 }) {
               }}
             />
             <p style={{ margin: "8px 0 0", fontSize: 12, opacity: 0.7, wordBreak: "break-all" }}>
-              {preview.path}
+              {previewLabel ? `[${previewLabel}]` : ""}
             </p>
           </>
         ) : (
-          <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>
-            {uploadStatus || "셀을 선택하면 여기에 확대 이미지가 표시됩니다."}
-          </p>
+          uploadStatus ? <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>{uploadStatus}</p> : null
         )}
       </div>
     </section>
