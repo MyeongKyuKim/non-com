@@ -157,7 +157,15 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                 display: "block",
               }}
             />
-            <p style={{ margin: "8px 0 0", fontSize: 12, opacity: 0.7, wordBreak: "break-all" }}>
+            <p
+              style={{
+                margin: "8px 0 0",
+                fontSize: 12,
+                opacity: 0.7,
+                wordBreak: "break-all",
+                textAlign: "center",
+              }}
+            >
               {previewLabel ? `[${previewLabel}]` : ""}
             </p>
           </>
