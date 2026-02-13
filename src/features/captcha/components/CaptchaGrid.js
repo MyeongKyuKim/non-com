@@ -39,7 +39,6 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   };
 
   const [uploadStatus, setUploadStatus] = useState("");
-  const delayedPreviewText = PREVIEW_DELAYED_MESSAGES[0] || "";
 
   const blobUrlToDataUrl = async (blobUrl) => {
     const blob = await fetch(blobUrl).then((r) => r.blob());
@@ -171,7 +170,15 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
             >
               {previewLabel ? `[${previewLabel}]` : ""}
             </p>
-            <DelayedMessage text={delayedPreviewText} triggerKey={preview.dataUrl} delayMs={3000} fadeMs={420} />
+            {PREVIEW_DELAYED_MESSAGES.map((message, idx) => (
+              <DelayedMessage
+                key={`${message}-${idx}`}
+                text={message}
+                triggerKey={preview.dataUrl}
+                delayMs={1000}
+                fadeMs={420}
+              />
+            ))}
           </>
         ) : (
           uploadStatus ? <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>{uploadStatus}</p> : null
