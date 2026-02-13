@@ -28,8 +28,8 @@ export default function CaptchaCell({
     if (!ctx) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const simW = 96;
-    const simH = 96;
+    const simW = 192;
+    const simH = 192;
 
     const state = initHeatmapState({
       w: simW,
