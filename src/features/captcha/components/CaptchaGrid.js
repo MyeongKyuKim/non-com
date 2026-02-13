@@ -183,11 +183,17 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
             >
               {previewLabel ? `[${previewLabel}]` : ""}
             </p>
-            {showTestText ? (
-              <p style={{ margin: "6px 0 0", fontSize: 12, opacity: 0.8, textAlign: "center" }}>
-                테스트
-              </p>
-            ) : null}
+            <p
+              style={{
+                margin: "6px 0 0",
+                fontSize: 12,
+                opacity: showTestText ? 0.8 : 0,
+                textAlign: "center",
+                transition: "opacity 420ms ease",
+              }}
+            >
+              테스트
+            </p>
           </>
         ) : (
           uploadStatus ? <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>{uploadStatus}</p> : null
