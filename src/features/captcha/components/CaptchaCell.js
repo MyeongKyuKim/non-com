@@ -52,8 +52,6 @@ export default function CaptchaCell({
 
       const scaleX = canvas.width / simW;
       const scaleY = canvas.height / simH;
-      const pw = Math.max(1, Math.floor(scaleX));
-      const ph = Math.max(1, Math.floor(scaleY));
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -65,13 +63,12 @@ export default function CaptchaCell({
 
           const a = Math.min(1, v / s.maxValue);
           const alpha = 0.02 + a * 0.35;
+          const x0 = Math.floor(x * scaleX);
+          const y0 = Math.floor(y * scaleY);
+          const x1 = Math.ceil((x + 1) * scaleX);
+          const y1 = Math.ceil((y + 1) * scaleY);
           ctx.fillStyle = `rgba(0,0,0,${alpha})`;
-          ctx.fillRect(
-            Math.floor(x * scaleX),
-            Math.floor(y * scaleY),
-            pw,
-            ph
-          );
+          ctx.fillRect(x0, y0, Math.max(1, x1 - x0), Math.max(1, y1 - y0));
         }
       }
     };
@@ -79,8 +76,6 @@ export default function CaptchaCell({
     const drawDirty = () => {
       const scaleX = canvas.width / simW;
       const scaleY = canvas.height / simH;
-      const pw = Math.max(1, Math.floor(scaleX));
-      const ph = Math.max(1, Math.floor(scaleY));
 
       const s = stateRef.current;
       for (const p of s.dirty) {
@@ -88,14 +83,13 @@ export default function CaptchaCell({
         const v = s.field[k];
         const a = Math.min(1, v / s.maxValue);
         const alpha = 0.02 + a * 0.35;
+        const x0 = Math.floor(p.x * scaleX);
+        const y0 = Math.floor(p.y * scaleY);
+        const x1 = Math.ceil((p.x + 1) * scaleX);
+        const y1 = Math.ceil((p.y + 1) * scaleY);
 
         ctx.fillStyle = `rgba(0,0,0,${alpha})`;
-        ctx.fillRect(
-          Math.floor(p.x * scaleX),
-          Math.floor(p.y * scaleY),
-          pw,
-          ph
-        );
+        ctx.fillRect(x0, y0, Math.max(1, x1 - x0), Math.max(1, y1 - y0));
       }
     };
 
