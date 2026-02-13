@@ -175,7 +175,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                 key={`${message}-${idx}`}
                 text={message}
                 triggerKey={preview.dataUrl}
-                delayMs={1000}
+                delayMs={1000 + idx * 1000}
                 fadeMs={420}
               />
             ))}
