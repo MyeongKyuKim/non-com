@@ -10,6 +10,7 @@ export default function CaptchaGrid({ size = 4 }) {
 
   const [captureNonce, setCaptureNonce] = useState(0);
   const [captureTarget, setCaptureTarget] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   // ✅ "한 번만" 다운로드 보장: index별로 이미 저장했는지 기억
   const downloadedRef = useRef(new Set());
@@ -69,7 +70,7 @@ export default function CaptchaGrid({ size = 4 }) {
       throw new Error(json?.detail || json?.error || "Upload failed");
     }
 
-    return json;
+    return { ...json, dataUrl };
   };
 
   // ✅ 파일명 규칙: non-com_cell-05_20260203-152045.png
@@ -99,7 +100,12 @@ export default function CaptchaGrid({ size = 4 }) {
 
     try {
       const result = await uploadCapture({ index, blobUrl, filename });
-      setUploadStatus(`셀 ${index + 1} 업로드 완료: ${result.path}`);
+      setUploadStatus("");
+      setPreview({
+        index,
+        dataUrl: result.dataUrl,
+        path: result.path,
+      });
     } catch (error) {
       downloadedRef.current.delete(index);
       setUploadStatus(`셀 ${index + 1} 업로드 실패: ${error.message}`);
@@ -107,7 +113,16 @@ export default function CaptchaGrid({ size = 4 }) {
   };
 
   return (
-    <section style={{ padding: 16, display: "flex", justifyContent: "center" }}>
+    <section
+      style={{
+        padding: 16,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        gap: 12,
+        flexWrap: "wrap",
+      }}
+    >
       <div
         style={{
           display: "grid",
@@ -127,11 +142,32 @@ export default function CaptchaGrid({ size = 4 }) {
           />
         ))}
       </div>
-      {uploadStatus ? (
-        <p style={{ margin: "12px auto 0", width: "min(520px, 100%)", fontSize: 13, opacity: 0.75 }}>
-          {uploadStatus}
-        </p>
-      ) : null}
+      <div style={{ width: "min(260px, 100%)" }}>
+        {preview?.dataUrl ? (
+          <>
+            <img
+              src={preview.dataUrl}
+              alt={`셀 ${preview.index + 1} 확대 미리보기`}
+              style={{
+                width: "100%",
+                aspectRatio: "1 / 1",
+                objectFit: "contain",
+                border: "1px solid rgba(0,0,0,0.15)",
+                borderRadius: 10,
+                background: "#fff",
+                display: "block",
+              }}
+            />
+            <p style={{ margin: "8px 0 0", fontSize: 12, opacity: 0.7, wordBreak: "break-all" }}>
+              {preview.path}
+            </p>
+          </>
+        ) : (
+          <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>
+            {uploadStatus || "셀을 선택하면 여기에 확대 이미지가 표시됩니다."}
+          </p>
+        )}
+      </div>
     </section>
   );
 }
