@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import CaptchaCell from "./CaptchaCell";
 import DelayedMessage from "./DelayedMessage";
 import { PREVIEW_DELAYED_MESSAGES } from "../constants/messages";
@@ -13,6 +13,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const [captureNonce, setCaptureNonce] = useState(0);
   const [captureTarget, setCaptureTarget] = useState(null);
   const [preview, setPreview] = useState(null);
+  const previewRef = useRef(null);
 
   // ✅ "한 번만" 다운로드 보장: index별로 이미 저장했는지 기억
   const downloadedRef = useRef(new Set());
@@ -113,6 +114,15 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
     }
   };
 
+  useEffect(() => {
+    if (!preview?.dataUrl) return;
+    previewRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  }, [preview?.dataUrl]);
+
   return (
     <section
       style={{
@@ -147,6 +157,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
         {preview?.dataUrl ? (
           <>
             <img
+              ref={previewRef}
               src={preview.dataUrl}
               alt={`셀 ${preview.index + 1} 확대 미리보기`}
               style={{

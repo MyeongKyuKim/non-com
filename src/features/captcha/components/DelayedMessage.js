@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function DelayedMessage({
   text = "",
@@ -7,6 +7,7 @@ export default function DelayedMessage({
   fadeMs = 420,
 }) {
   const [visible, setVisible] = useState(false);
+  const messageRef = useRef(null);
 
   useEffect(() => {
     if (!text || !triggerKey) {
@@ -22,10 +23,20 @@ export default function DelayedMessage({
     return () => clearTimeout(timer);
   }, [text, triggerKey, delayMs]);
 
+  useEffect(() => {
+    if (!visible) return;
+    messageRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  }, [visible]);
+
   if (!text) return null;
 
   return (
     <p
+      ref={messageRef}
       style={{
         margin: "6px 0 0",
         fontSize: 32,
