@@ -28,7 +28,7 @@ export default function DelayedMessage({
     <p
       style={{
         margin: "6px 0 0",
-        fontSize: 12,
+        fontSize: 32,
         opacity: visible ? 0.8 : 0,
         textAlign: "center",
         transition: `opacity ${fadeMs}ms ease`,
