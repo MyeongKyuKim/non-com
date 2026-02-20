@@ -127,6 +127,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
     <section
       style={{
         padding: 16,
+        paddingBottom: preview?.dataUrl ? "45vh" : 16,
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
@@ -164,6 +165,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                 width: "100%",
                 aspectRatio: "1 / 1",
                 objectFit: "contain",
+                scrollMarginBlock: "40vh",
                 border: "1px solid rgba(0,0,0,0.15)",
                 borderRadius: 10,
                 background: "#fff",

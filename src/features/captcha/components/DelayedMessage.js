@@ -25,10 +25,13 @@ export default function DelayedMessage({
 
   useEffect(() => {
     if (!visible) return;
-    messageRef.current?.scrollIntoView({
+    const el = messageRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const targetTop = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
+    window.scrollTo({
+      top: Math.max(0, targetTop),
       behavior: "smooth",
-      block: "center",
-      inline: "nearest",
     });
   }, [visible]);
 
@@ -40,6 +43,7 @@ export default function DelayedMessage({
       style={{
         margin: "6px 0 0",
         fontSize: 32,
+        scrollMarginBlock: "40vh",
         opacity: visible ? 0.8 : 0,
         textAlign: "center",
         transition: `opacity ${fadeMs}ms ease`,
