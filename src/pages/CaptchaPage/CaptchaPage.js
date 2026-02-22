@@ -24,7 +24,7 @@ export default function CaptchaPage() {
 
   return (
     <ResponsiveFrame maxWidth={680}>
-      <CaptchaHeader subtitle={`[${target}]가 있는 타일을 모두 선택하세요`} />
+      <CaptchaHeader subtitle={`[${target}]가 있는 타일을 선택하세요`} />
       <CaptchaGrid size={4} previewLabel={target} />
     </ResponsiveFrame>
   );

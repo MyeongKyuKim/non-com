@@ -9,7 +9,7 @@ export default function ResponsiveFrame({ children, maxWidth = 720 }) {
         justifyContent: "center",
         backgroundColor: "#e9f8ea",
         backgroundImage:
-          "linear-gradient(160deg, #e7f8e7 0%, #c8efcf 45%, #a8e3b4 100%)",
+          "linear-gradient(160deg, #e7f8e7 0%, #7fc1a2 45%, #114f23 100%)",
         padding: "24px 16px",
         boxSizing: "border-box",
       }}

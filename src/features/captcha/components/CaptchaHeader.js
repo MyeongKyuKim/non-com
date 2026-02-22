@@ -19,13 +19,22 @@ export default function CaptchaHeader({
 }) {
   const randomSubtitle = useMemo(() => {
     const target = CAPTCHA_TARGETS[Math.floor(Math.random() * CAPTCHA_TARGETS.length)];
-    return `[${target}]가 있는 타일을 모두 선택하세요`;
+    return `[${target}]가 있는 타일을 선택하세요`;
   }, []);
 
   return (
     <header style={{ padding: "16px 16px 12px", width: "min(520px, 100%)", margin: "0 auto" }}>
-      <h1 style={{ margin: 0, fontSize: 20 }}>{title}</h1>
-      <p style={{ margin: "6px 0 0", opacity: 0.7, fontSize: 13 }}>
+      <h1 style={{ margin: 0, fontSize: 35, fontFamily: "\"IBM Plex Sans KR\", sans-serif" }}>
+        {title}
+      </h1>
+      <p
+        style={{
+          margin: "6px 0 0",
+          opacity: 0.7,
+          fontSize: 17,
+          fontFamily: "\"IBM Plex Sans KR\", sans-serif",
+        }}
+      >
         {subtitle || randomSubtitle}
       </p>
     </header>

@@ -179,7 +179,7 @@ useEffect(() => {
           ? "2px solid rgba(0,0,0,0.85)"
           : "1px solid rgba(0,0,0,0.15)",
         borderRadius: 10,
-        background: isSelected ? "rgba(0,0,0,0.06)" : "transparent",
+        background: "#fff",
         cursor: "pointer",
         padding: 0,
         overflow: "hidden",
@@ -188,7 +188,12 @@ useEffect(() => {
     >
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "100%", display: "block" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "block",
+          backgroundColor: "#fff",
+        }}
       />
     </button>
   );
