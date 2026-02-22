@@ -14,7 +14,7 @@ const CAPTCHA_TARGETS = [
 ];
 
 export default function CaptchaHeader({
-  title = "CAPTCHA Voyager",
+  title = "CAPTCHA Fresh",
   subtitle,
 }) {
   const randomSubtitle = useMemo(() => {
