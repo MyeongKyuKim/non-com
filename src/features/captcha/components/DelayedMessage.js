@@ -101,9 +101,19 @@ export default function DelayedMessage({
   return (
     <p
       ref={messageRef}
+      className={visible && onClick ? "delayed-message-link" : undefined}
+      role={visible && onClick ? "button" : undefined}
+      tabIndex={visible && onClick ? 0 : undefined}
       onClick={() => {
         if (!visible || !onClick) return;
         onClick();
+      }}
+      onKeyDown={(event) => {
+        if (!visible || !onClick) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick();
+        }
       }}
       style={{
         margin: "6px 0 0",
@@ -113,9 +123,6 @@ export default function DelayedMessage({
         transform: `translate(${offsetX + bracketShiftX}px, ${offsetY}px)`,
         width: "100%",
         textAlign: hasBracket ? "left" : "center",
-        cursor: visible && onClick ? "pointer" : "default",
-        textDecoration: visible && onClick ? "underline" : "none",
-        textDecorationColor: "#f4f4f4",
         transition: `transform ${fadeMs}ms ease`,
       }}
     >

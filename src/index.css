@@ -20,3 +20,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.delayed-message-link {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #f4f4f4;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.delayed-message-link:hover {
+  filter: brightness(1.1);
+  text-decoration-color: #ffffff;
+  text-decoration-thickness: 2px;
+}
+
+.delayed-message-link:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
