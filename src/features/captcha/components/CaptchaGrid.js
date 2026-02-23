@@ -194,7 +194,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                   key={`${messageConfig.text}-${idx}`}
                   text={messageText}
                   triggerKey={preview.dataUrl}
-                  delayMs={2000 + idx * 1000}
+                  delayMs={2000 + idx * 2000}
                   fadeMs={420}
                   offsetX={messageConfig.offsetX}
                   offsetY={messageConfig.offsetY}

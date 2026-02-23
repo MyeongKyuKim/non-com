@@ -48,12 +48,23 @@ export default function DelayedMessage({
         whiteSpace: "nowrap",
         scrollMarginBlock: "40vh",
         transform: `translate(${offsetX}px, ${offsetY}px)`,
-        opacity: visible ? 0.8 : 0,
         textAlign: "center",
-        transition: `opacity ${fadeMs}ms ease, transform ${fadeMs}ms ease`,
+        transition: `transform ${fadeMs}ms ease`,
       }}
     >
-      {text}
+      {Array.from(text).map((char, idx) => (
+        <span
+          key={`${char}-${idx}`}
+          style={{
+            display: "inline-block",
+            color: "#f4f4f4",
+            opacity: visible ? 0.8 : 0,
+            transition: `opacity ${fadeMs}ms ease ${idx * 45}ms`,
+          }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </span>
+      ))}
     </p>
   );
 }
