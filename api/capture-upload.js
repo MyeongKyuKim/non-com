@@ -15,6 +15,15 @@ function sanitizeFilename(name) {
     .replace(/^_+|_+$/g, "");
 }
 
+function buildGitHubHeaders(token, extra = {}) {
+  return {
+    Accept: "application/vnd.github+json",
+    Authorization: `Bearer ${token}`,
+    "User-Agent": "non-com-capture-uploader",
+    ...extra,
+  };
+}
+
 function encodeGitHubPath(path) {
   return path
     .split("/")
@@ -36,12 +45,7 @@ function parseDataUrl(dataUrl) {
 async function githubRequest(path, token, options = {}) {
   const res = await fetch(`${GITHUB_API}${path}`, {
     ...options,
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${token}`,
-      "User-Agent": "non-com-capture-uploader",
-      ...options.headers,
-    },
+    headers: buildGitHubHeaders(token, options.headers),
   });
 
   if (!res.ok) {
@@ -50,6 +54,57 @@ async function githubRequest(path, token, options = {}) {
   }
 
   return res;
+}
+
+async function githubGet(path, token) {
+  const res = await fetch(`${GITHUB_API}${path}`, {
+    headers: buildGitHubHeaders(token),
+  });
+
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub API ${res.status}: ${text}`);
+  }
+  return res.json();
+}
+
+async function upsertFile({ owner, repo, branch, path, content, sha, token, message }) {
+  const contentPath = `/repos/${owner}/${repo}/contents/${encodeGitHubPath(path)}`;
+  const body = {
+    message,
+    content,
+    branch,
+  };
+  if (sha) body.sha = sha;
+  const putRes = await githubRequest(contentPath, token, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return putRes.json();
+}
+
+function decodeGitHubContent(content) {
+  const compact = String(content || "").replace(/\n/g, "");
+  return Buffer.from(compact, "base64").toString("utf8");
+}
+
+function encodeTextBase64(text) {
+  return Buffer.from(String(text), "utf8").toString("base64");
+}
+
+function nextCaptureId(items) {
+  const regex = /^(\d{6})\.(png|jpg|jpeg)$/i;
+  let maxId = 0;
+  for (const item of items || []) {
+    if (!item || item.type !== "file") continue;
+    const match = regex.exec(item.name || "");
+    if (!match) continue;
+    const num = Number(match[1]);
+    if (Number.isFinite(num) && num > maxId) maxId = num;
+  }
+  return String(maxId + 1).padStart(6, "0");
 }
 
 async function ensureBranch({ owner, repo, branch, token }) {
@@ -100,8 +155,7 @@ export default async function handler(req, res) {
     const repo = getEnv("GITHUB_REPO");
     const branch = process.env.GITHUB_BRANCH || "captures";
 
-    const { filename, dataUrl, cellIndex } = req.body || {};
-    const safeFilename = sanitizeFilename(filename || `cell-${cellIndex || "x"}.png`);
+    const { dataUrl, caption, label, license, tags } = req.body || {};
     const { mime, base64 } = parseDataUrl(dataUrl);
 
     if (mime !== "image/png") {
@@ -114,44 +168,63 @@ export default async function handler(req, res) {
     await ensureBranch({ owner, repo, branch, token });
 
     const dateDir = new Date().toISOString().slice(0, 10);
-    const path = `captures/${dateDir}/${safeFilename}`;
-    const contentPath = `/repos/${owner}/${repo}/contents/${encodeGitHubPath(path)}`;
+    const imagesDir = `captures/${dateDir}/images`;
+    const listPath = `/repos/${owner}/${repo}/contents/${encodeGitHubPath(imagesDir)}?ref=${encodeURIComponent(
+      branch
+    )}`;
+    const dirItems = (await githubGet(listPath, token)) || [];
 
-    let sha;
-    const existingRes = await fetch(`${GITHUB_API}${contentPath}?ref=${encodeURIComponent(branch)}`, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${token}`,
-        "User-Agent": "non-com-capture-uploader",
-      },
-    });
-    if (existingRes.ok) {
-      const existingJson = await existingRes.json();
-      sha = existingJson?.sha;
-    } else if (existingRes.status !== 404) {
-      const text = await existingRes.text();
-      throw new Error(`Failed checking existing file: ${text}`);
-    }
+    const id = nextCaptureId(dirItems);
+    const imageName = `${id}.png`;
+    const imagePath = `${imagesDir}/${imageName}`;
 
-    const commitMessage = `capture: ${safeFilename}`;
-    const putRes = await githubRequest(contentPath, token, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: commitMessage,
-        content: base64,
-        branch,
-        sha,
-      }),
+    const imagePut = await upsertFile({
+      owner,
+      repo,
+      branch,
+      path: imagePath,
+      content: base64,
+      token,
+      message: `capture: ${id}`,
     });
 
-    const putJson = await putRes.json();
+    const readmePath = `captures/${dateDir}/README.md`;
+    const readmeApiPath = `/repos/${owner}/${repo}/contents/${encodeGitHubPath(
+      readmePath
+    )}?ref=${encodeURIComponent(branch)}`;
+    const existingReadme = await githubGet(readmeApiPath, token);
+    const existingText = existingReadme ? decodeGitHubContent(existingReadme.content) : "";
+
+    const entry = {
+      id,
+      file: `images/${imageName}`,
+      caption: String(caption || ""),
+      label: String(label || "capture"),
+      license: String(license || "CC-BY-4.0"),
+      tags: Array.isArray(tags) ? tags.map((x) => String(x)) : [],
+    };
+    const entryLine = JSON.stringify(entry);
+    const separator = existingText && !existingText.endsWith("\n") ? "\n" : "";
+    const nextReadme = `${existingText}${separator}${entryLine}\n`;
+
+    await upsertFile({
+      owner,
+      repo,
+      branch,
+      path: readmePath,
+      content: encodeTextBase64(nextReadme),
+      sha: existingReadme?.sha,
+      token,
+      message: `capture index: ${dateDir} ${id}`,
+    });
 
     return res.status(200).json({
       ok: true,
-      path,
+      id,
+      path: imagePath,
+      readmePath,
       branch,
-      commitSha: putJson?.commit?.sha || null,
+      commitSha: imagePut?.commit?.sha || null,
     });
   } catch (error) {
     return res.status(500).json({

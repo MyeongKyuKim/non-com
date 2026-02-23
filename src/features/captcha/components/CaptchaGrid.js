@@ -73,6 +73,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
         filename,
         dataUrl,
         cellIndex: index + 1,
+        caption: previewLabel,
       }),
     });
 
