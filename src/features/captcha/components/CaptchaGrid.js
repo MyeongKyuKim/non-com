@@ -4,6 +4,13 @@ import DelayedMessage from "./DelayedMessage";
 import { PREVIEW_DELAYED_MESSAGES } from "../constants/messages";
 
 const BRACKET_COLUMN_PX = 112;
+const PREVIEW_TARGET_STYLE = {
+  fontSize: 17,
+  lineHeight: 1.2,
+  fontWeight: "bold",
+  fontStyle: "italic",
+  color: "#111827",
+};
 
 export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const cells = useMemo(
@@ -178,7 +185,6 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
               style={{
                 margin: "8px 0 0",
                 fontSize: 12,
-                opacity: 0.7,
                 wordBreak: "break-all",
                 width: "100%",
                 textAlign: "left",
@@ -193,7 +199,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                       textAlign: "right",
                     }}
                   />
-                  <span>{`[${previewLabel}]`}</span>
+                  <span style={PREVIEW_TARGET_STYLE}>{`[${previewLabel}]`}</span>
                 </>
               ) : (
                 ""

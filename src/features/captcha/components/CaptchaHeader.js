@@ -19,7 +19,7 @@ export default function CaptchaHeader({
 }) {
   const randomSubtitle = useMemo(() => {
     const target = CAPTCHA_TARGETS[Math.floor(Math.random() * CAPTCHA_TARGETS.length)];
-    return `[${target}]가 있는 타일을 선택하세요`;
+    return `[${target}]이/가 있는 타일을 선택하세요`;
   }, []);
 
   return (

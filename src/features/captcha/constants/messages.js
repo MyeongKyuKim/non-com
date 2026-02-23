@@ -5,7 +5,7 @@ export const PREVIEW_DELAYED_MESSAGES = [
     offsetY: 0,
   },
   {
-    text: "싱싱한 [%const CAPTCHA_TARGETS]는 지금 당장 AI 가 학습을 실천합니다.",
+    text: "싱싱한 [%const CAPTCHA_TARGETS]을 보며 지금 당장 AI는 학습을 실천합니다.",
     offsetX: 0,
     offsetY: 2,
   },
@@ -30,7 +30,7 @@ export const PREVIEW_DELAYED_MESSAGES = [
     offsetY: 0,
   },
   {
-    text: "더 이상 일방적으로 AI 에게 우리의 데이터를 탈취당하지 말아요.",
+    text: "더 이상 일방적으로 AI에게 우리의 데이터를 탈취당하지 말아요.",
     offsetX: 0,
     offsetY: 4,
   },
