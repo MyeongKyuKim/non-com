@@ -42,7 +42,7 @@ export const PREVIEW_DELAYED_MESSAGES = [
   {
     text: "정말 신선해요!",
     offsetX: 0,
-    offsetY: 0,
-    fontSize: 22,
+    offsetY: -20,
+    fontSize: 66,
   },
 ];

@@ -85,7 +85,7 @@ export default function DelayedMessage({
         style={{
           display: "inline-block",
           color: dataTokenRanges.some((r) => idx >= r.start && idx < r.end)
-            ? "#def324"
+            ? "#f3c921"
             : "#f4f4f4",
           opacity: visible ? 0.8 : 0,
           transition: `opacity ${fadeMs}ms ease ${idx * 45}ms`,
