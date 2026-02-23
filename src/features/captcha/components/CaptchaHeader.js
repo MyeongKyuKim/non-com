@@ -24,7 +24,13 @@ export default function CaptchaHeader({
 
   return (
     <header style={{ padding: "16px 16px 12px", width: "min(520px, 100%)", margin: "0 auto" }}>
-      <h1 style={{ margin: 0, fontSize: 35, fontFamily: "\"IBM Plex Sans KR\", sans-serif" }}>
+      <h1
+        style={{
+          margin: 0,
+          fontSize: 35,
+          fontFamily: "\"Galmuri14\", \"IBM Plex Sans KR\", sans-serif",
+        }}
+      >
         {title}
       </h1>
       <p
@@ -32,7 +38,7 @@ export default function CaptchaHeader({
           margin: "6px 0 0",
           opacity: 0.7,
           fontSize: 17,
-          fontFamily: "\"IBM Plex Sans KR\", sans-serif",
+          fontFamily: "\"Galmuri14\", \"IBM Plex Sans KR\", sans-serif",
         }}
       >
         {subtitle || randomSubtitle}
