@@ -8,7 +8,6 @@ const PREVIEW_TARGET_STYLE = {
   fontSize: 17,
   lineHeight: 1.2,
   fontWeight: "bold",
-  fontStyle: "italic",
   color: "#111827",
 };
 

@@ -40,9 +40,9 @@ export const PREVIEW_DELAYED_MESSAGES = [
     offsetY: 8,
   },
   {
-    text: "정말 신선해요!",
+    text: "🥬 정말 신선해요! 🌱",
     offsetX: 0,
-    offsetY: -20,
+    offsetY: 20,
     fontSize: 66,
   },
 ];
