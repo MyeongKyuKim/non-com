@@ -186,9 +186,9 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
             {PREVIEW_DELAYED_MESSAGES.map((message, idx) => (
               <DelayedMessage
                 key={`${message}-${idx}`}
-                text={message.replaceAll("[]", previewLabel)}
+                text={message}
                 triggerKey={preview.dataUrl}
-                delayMs={1000 + idx * 1000}
+                delayMs={2000 + idx * 1000}
                 fadeMs={420}
               />
             ))}

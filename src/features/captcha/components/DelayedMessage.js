@@ -43,6 +43,7 @@ export default function DelayedMessage({
       style={{
         margin: "6px 0 0",
         fontSize: 32,
+        whiteSpace: "nowrap",
         scrollMarginBlock: "40vh",
         opacity: visible ? 0.8 : 0,
         textAlign: "center",
