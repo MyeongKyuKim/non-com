@@ -220,6 +220,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                   fadeMs={420}
                   offsetX={messageConfig.offsetX}
                   offsetY={messageConfig.offsetY}
+                  fontSize={messageConfig.fontSize}
                   bracketColumnPx={BRACKET_COLUMN_PX}
                 />
               );

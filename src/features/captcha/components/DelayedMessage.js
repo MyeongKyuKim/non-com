@@ -7,6 +7,7 @@ export default function DelayedMessage({
   fadeMs = 420,
   offsetX = 0,
   offsetY = 0,
+  fontSize = 32,
   bracketColumnPx = 112,
 }) {
   const [visible, setVisible] = useState(false);
@@ -63,6 +64,18 @@ export default function DelayedMessage({
   }, [hasBracket, text, bracketColumnPx, bracketShiftX]);
 
   const chars = useMemo(() => Array.from(text), [text]);
+  const dataTokenRanges = useMemo(() => {
+    const token = "[데이터]";
+    const ranges = [];
+    let from = 0;
+    while (from < text.length) {
+      const start = text.indexOf(token, from);
+      if (start === -1) break;
+      ranges.push({ start, end: start + token.length });
+      from = start + token.length;
+    }
+    return ranges;
+  }, [text]);
 
   const renderAnimatedChars = () =>
     chars.map((char, idx) => (
@@ -71,7 +84,9 @@ export default function DelayedMessage({
         ref={idx === bracketIndex ? bracketRef : null}
         style={{
           display: "inline-block",
-          color: "#f4f4f4",
+          color: dataTokenRanges.some((r) => idx >= r.start && idx < r.end)
+            ? "#def324"
+            : "#f4f4f4",
           opacity: visible ? 0.8 : 0,
           transition: `opacity ${fadeMs}ms ease ${idx * 45}ms`,
         }}
@@ -87,7 +102,7 @@ export default function DelayedMessage({
       ref={messageRef}
       style={{
         margin: "6px 0 0",
-        fontSize: 32,
+        fontSize,
         whiteSpace: "nowrap",
         scrollMarginBlock: "40vh",
         transform: `translate(${offsetX + bracketShiftX}px, ${offsetY}px)`,
