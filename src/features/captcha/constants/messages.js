@@ -41,7 +41,7 @@ export const PREVIEW_DELAYED_MESSAGES = [
   },
   {
     text: "🥬 정말 신선해요! 🌱",
-    offsetX: -90,
+    offsetX: -100,
     offsetY: 20,
     fontSize: 66,
   },
@@ -49,19 +49,19 @@ export const PREVIEW_DELAYED_MESSAGES = [
     text: "images 폴더에는 갓 잡은 신선한 [이미지]가",
     offsetX: 0,
     offsetY: 0,
-    fontSize: 22,
+    fontSize: 20,
   },
   {
     text: "README.md에는 AI가 분석하기 쉽게 만든 [데이터] 설명이 있어요",
     offsetX: 0,
     offsetY: 0,
-    fontSize: 22,
+    fontSize: 20,
   },
   {
     text: "배송 확인하러 하기(클릭)",
     offsetX: 0,
     offsetY: 0,
-    fontSize: 22,
+    fontSize: 20,
     action: "openCaptureDir",
   },
 ];
