@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export default function DelayedMessage({
   text = "",
@@ -10,7 +10,9 @@ export default function DelayedMessage({
   bracketColumnPx = 112,
 }) {
   const [visible, setVisible] = useState(false);
+  const [bracketShiftX, setBracketShiftX] = useState(0);
   const messageRef = useRef(null);
+  const bracketRef = useRef(null);
 
   useEffect(() => {
     if (!text || !triggerKey) {
@@ -38,27 +40,47 @@ export default function DelayedMessage({
     });
   }, [visible]);
 
-  if (!text) return null;
-
   const bracketIndex = text.indexOf("[");
   const hasBracket = bracketIndex >= 0;
-  const prefixText = hasBracket ? text.slice(0, bracketIndex) : "";
-  const bracketText = hasBracket ? text.slice(bracketIndex) : text;
 
-  const renderAnimatedChars = (value, startIdx = 0) =>
-    Array.from(value).map((char, idx) => (
+  useEffect(() => {
+    if (!hasBracket) {
+      setBracketShiftX(0);
+      return;
+    }
+    const container = messageRef.current;
+    const bracket = bracketRef.current;
+    if (!container || !bracket) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const bracketRect = bracket.getBoundingClientRect();
+    const currentBracketX = bracketRect.left - containerRect.left;
+    const nextShift = bracketColumnPx - currentBracketX;
+
+    if (Math.abs(nextShift - bracketShiftX) > 0.5) {
+      setBracketShiftX(nextShift);
+    }
+  }, [hasBracket, text, bracketColumnPx, bracketShiftX]);
+
+  const chars = useMemo(() => Array.from(text), [text]);
+
+  const renderAnimatedChars = () =>
+    chars.map((char, idx) => (
       <span
-        key={`${char}-${startIdx + idx}`}
+        key={`${char}-${idx}`}
+        ref={idx === bracketIndex ? bracketRef : null}
         style={{
           display: "inline-block",
           color: "#f4f4f4",
           opacity: visible ? 0.8 : 0,
-          transition: `opacity ${fadeMs}ms ease ${(startIdx + idx) * 45}ms`,
+          transition: `opacity ${fadeMs}ms ease ${idx * 45}ms`,
         }}
       >
         {char === " " ? "\u00A0" : char}
       </span>
     ));
+
+  if (!text) return null;
 
   return (
     <p
@@ -68,28 +90,13 @@ export default function DelayedMessage({
         fontSize: 32,
         whiteSpace: "nowrap",
         scrollMarginBlock: "40vh",
-        transform: `translate(${offsetX}px, ${offsetY}px)`,
+        transform: `translate(${offsetX + bracketShiftX}px, ${offsetY}px)`,
         width: "100%",
         textAlign: hasBracket ? "left" : "center",
         transition: `transform ${fadeMs}ms ease`,
       }}
     >
-      {hasBracket ? (
-        <>
-          <span
-            style={{
-              display: "inline-block",
-              width: bracketColumnPx,
-              textAlign: "right",
-            }}
-          >
-            {renderAnimatedChars(prefixText, 0)}
-          </span>
-          <span>{renderAnimatedChars(bracketText, prefixText.length)}</span>
-        </>
-      ) : (
-        renderAnimatedChars(text, 0)
-      )}
+      {renderAnimatedChars()}
     </p>
   );
 }
