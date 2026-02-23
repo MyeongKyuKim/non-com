@@ -10,7 +10,17 @@ export const PREVIEW_DELAYED_MESSAGES = [
     offsetY: 2,
   },
   {
-    text: "어때요? 연상력과 상상력이 담긴 신선한 [%const CAPTCHA_TARGETS]를 AI가 이해할 수 있을까요?",
+    text: "어때요?",
+    offsetX: -8,
+    offsetY: 6,
+  },
+  {
+    text: "연상력과 상상력이 담긴 신선한 [%const CAPTCHA_TARGETS]",
+    offsetX: -8,
+    offsetY: 6,
+  },
+  {
+    text: "AI가 이해할 수 있을까요?",
     offsetX: -8,
     offsetY: 6,
   },

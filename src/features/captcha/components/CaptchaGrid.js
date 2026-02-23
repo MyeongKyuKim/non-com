@@ -3,6 +3,8 @@ import CaptchaCell from "./CaptchaCell";
 import DelayedMessage from "./DelayedMessage";
 import { PREVIEW_DELAYED_MESSAGES } from "../constants/messages";
 
+const BRACKET_COLUMN_PX = 112;
+
 export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
   const cells = useMemo(
     () => Array.from({ length: size * size }, (_, i) => i),
@@ -178,10 +180,24 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                 fontSize: 12,
                 opacity: 0.7,
                 wordBreak: "break-all",
-                textAlign: "center",
+                width: "100%",
+                textAlign: "left",
               }}
             >
-              {previewLabel ? `[${previewLabel}]` : ""}
+              {previewLabel ? (
+                <>
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: BRACKET_COLUMN_PX,
+                      textAlign: "right",
+                    }}
+                  />
+                  <span>{`[${previewLabel}]`}</span>
+                </>
+              ) : (
+                ""
+              )}
             </p>
             {PREVIEW_DELAYED_MESSAGES.map((messageConfig, idx) => {
               const tokenValue = previewLabel ? `[${previewLabel}]` : "[]";
@@ -198,6 +214,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                   fadeMs={420}
                   offsetX={messageConfig.offsetX}
                   offsetY={messageConfig.offsetY}
+                  bracketColumnPx={BRACKET_COLUMN_PX}
                 />
               );
             })}
