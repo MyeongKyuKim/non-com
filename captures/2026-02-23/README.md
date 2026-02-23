@@ -5,3 +5,4 @@
 {"id":"000005","file":"images/000005.png","caption":"소화전"}
 {"id":"000006","file":"images/000006.png","caption":"횡단보도"}
 {"id":"000007","file":"images/000007.png","caption":"오토바이"}
+{"id":"000008","file":"images/000008.png","caption":"버스"}
