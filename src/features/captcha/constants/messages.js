@@ -49,15 +49,19 @@ export const PREVIEW_DELAYED_MESSAGES = [
     text: "images 폴더에는 갓 잡은 신선한 [이미지]가",
     offsetX: 0,
     offsetY: 0,
+    fontSize: 42,
   },
   {
-    text: "README.md에는 AI가 분석하기 쉽게 만든 데이터 설명이 있어요",
+    text: "README.md에는 AI가 분석하기 쉽게 만든 [데이터] 설명이 있어요",
     offsetX: 0,
     offsetY: 0,
+    fontSize: 42,
   },
   {
     text: "배송 확인하러 하기",
     offsetX: 0,
     offsetY: 0,
+    fontSize: 52,
+    action: "openCaptureDir",
   },
 ];

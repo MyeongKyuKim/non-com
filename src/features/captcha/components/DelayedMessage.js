@@ -9,6 +9,7 @@ export default function DelayedMessage({
   offsetY = 0,
   fontSize = 32,
   bracketColumnPx = 112,
+  onClick,
 }) {
   const [visible, setVisible] = useState(false);
   const [bracketShiftX, setBracketShiftX] = useState(0);
@@ -100,6 +101,10 @@ export default function DelayedMessage({
   return (
     <p
       ref={messageRef}
+      onClick={() => {
+        if (!visible || !onClick) return;
+        onClick();
+      }}
       style={{
         margin: "6px 0 0",
         fontSize,
@@ -108,6 +113,9 @@ export default function DelayedMessage({
         transform: `translate(${offsetX + bracketShiftX}px, ${offsetY}px)`,
         width: "100%",
         textAlign: hasBracket ? "left" : "center",
+        cursor: visible && onClick ? "pointer" : "default",
+        textDecoration: visible && onClick ? "underline" : "none",
+        textDecorationColor: "#f4f4f4",
         transition: `transform ${fadeMs}ms ease`,
       }}
     >

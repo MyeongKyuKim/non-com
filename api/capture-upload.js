@@ -168,6 +168,7 @@ export default async function handler(req, res) {
     await ensureBranch({ owner, repo, branch, token });
 
     const dateDir = new Date().toISOString().slice(0, 10);
+    const captureDirPath = `captures/${dateDir}`;
     const imagesDir = `captures/${dateDir}/images`;
     const listPath = `/repos/${owner}/${repo}/contents/${encodeGitHubPath(imagesDir)}?ref=${encodeURIComponent(
       branch
@@ -220,6 +221,8 @@ export default async function handler(req, res) {
       id,
       path: imagePath,
       readmePath,
+      captureDirPath,
+      captureDirUrl: `https://github.com/${owner}/${repo}/tree/${branch}/${captureDirPath}`,
       branch,
       commitSha: imagePut?.commit?.sha || null,
     });

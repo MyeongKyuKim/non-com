@@ -116,6 +116,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
       setPreview({
         index,
         dataUrl: result.dataUrl,
+        captureDirUrl: result.captureDirUrl || "",
       });
     } catch (error) {
       downloadedRef.current.delete(index);
@@ -211,6 +212,10 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                 "[%const CAPTCHA_TARGETS]",
                 tokenValue
               );
+              const onClick =
+                messageConfig.action === "openCaptureDir" && preview.captureDirUrl
+                  ? () => window.open(preview.captureDirUrl, "_blank", "noopener,noreferrer")
+                  : undefined;
               return (
                 <DelayedMessage
                   key={`${messageConfig.text}-${idx}`}
@@ -222,6 +227,7 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
                   offsetY={messageConfig.offsetY}
                   fontSize={messageConfig.fontSize}
                   bracketColumnPx={BRACKET_COLUMN_PX}
+                  onClick={onClick}
                 />
               );
             })}
