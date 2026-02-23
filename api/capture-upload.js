@@ -155,7 +155,7 @@ export default async function handler(req, res) {
     const repo = getEnv("GITHUB_REPO");
     const branch = process.env.GITHUB_BRANCH || "captures";
 
-    const { dataUrl, caption, label, license, tags } = req.body || {};
+    const { dataUrl, caption } = req.body || {};
     const { mime, base64 } = parseDataUrl(dataUrl);
 
     if (mime !== "image/png") {
@@ -199,9 +199,6 @@ export default async function handler(req, res) {
       id,
       file: `images/${imageName}`,
       caption: String(caption || ""),
-      label: String(label || "capture"),
-      license: String(license || "CC-BY-4.0"),
-      tags: Array.isArray(tags) ? tags.map((x) => String(x)) : [],
     };
     const entryLine = JSON.stringify(entry);
     const separator = existingText && !existingText.endsWith("\n") ? "\n" : "";
