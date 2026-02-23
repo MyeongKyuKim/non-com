@@ -5,6 +5,8 @@ export default function DelayedMessage({
   triggerKey = "",
   delayMs = 3000,
   fadeMs = 420,
+  offsetX = 0,
+  offsetY = 0,
 }) {
   const [visible, setVisible] = useState(false);
   const messageRef = useRef(null);
@@ -45,9 +47,10 @@ export default function DelayedMessage({
         fontSize: 32,
         whiteSpace: "nowrap",
         scrollMarginBlock: "40vh",
+        transform: `translate(${offsetX}px, ${offsetY}px)`,
         opacity: visible ? 0.8 : 0,
         textAlign: "center",
-        transition: `opacity ${fadeMs}ms ease`,
+        transition: `opacity ${fadeMs}ms ease, transform ${fadeMs}ms ease`,
       }}
     >
       {text}

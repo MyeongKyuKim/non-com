@@ -183,15 +183,24 @@ export default function CaptchaGrid({ size = 4, previewLabel = "" }) {
             >
               {previewLabel ? `[${previewLabel}]` : ""}
             </p>
-            {PREVIEW_DELAYED_MESSAGES.map((message, idx) => (
-              <DelayedMessage
-                key={`${message}-${idx}`}
-                text={message}
-                triggerKey={preview.dataUrl}
-                delayMs={2000 + idx * 1000}
-                fadeMs={420}
-              />
-            ))}
+            {PREVIEW_DELAYED_MESSAGES.map((messageConfig, idx) => {
+              const tokenValue = previewLabel ? `[${previewLabel}]` : "[]";
+              const messageText = messageConfig.text.replaceAll(
+                "[%const CAPTCHA_TARGETS]",
+                tokenValue
+              );
+              return (
+                <DelayedMessage
+                  key={`${messageConfig.text}-${idx}`}
+                  text={messageText}
+                  triggerKey={preview.dataUrl}
+                  delayMs={2000 + idx * 1000}
+                  fadeMs={420}
+                  offsetX={messageConfig.offsetX}
+                  offsetY={messageConfig.offsetY}
+                />
+              );
+            })}
           </>
         ) : (
           uploadStatus ? <p style={{ margin: 0, fontSize: 13, opacity: 0.75 }}>{uploadStatus}</p> : null
