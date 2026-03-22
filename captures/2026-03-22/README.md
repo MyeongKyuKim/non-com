@@ -8,3 +8,4 @@
 {"id":"000008","file":"images/000008.png","caption":"자동차"}
 {"id":"000009","file":"images/000009.png","caption":"계단"}
 {"id":"000010","file":"images/000010.png","caption":"계단"}
+{"id":"000011","file":"images/000011.png","caption":"버스"}
