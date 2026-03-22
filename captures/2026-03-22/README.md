@@ -6,3 +6,4 @@
 {"id":"000006","file":"images/000006.png","caption":"자동차"}
 {"id":"000007","file":"images/000007.png","caption":"자동차"}
 {"id":"000008","file":"images/000008.png","caption":"자동차"}
+{"id":"000009","file":"images/000009.png","caption":"계단"}
