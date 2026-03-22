@@ -24,3 +24,4 @@
 {"id":"000024","file":"images/000024.png","caption":"횡단보도"}
 {"id":"000025","file":"images/000025.png","caption":"오토바이"}
 {"id":"000026","file":"images/000026.png","caption":"오토바이"}
+{"id":"000027","file":"images/000027.png","caption":"오토바이"}
