@@ -28,3 +28,4 @@
 {"id":"000028","file":"images/000028.png","caption":"오토바이"}
 {"id":"000029","file":"images/000029.png","caption":"오토바이"}
 {"id":"000030","file":"images/000030.png","caption":"오토바이"}
+{"id":"000031","file":"images/000031.png","caption":"트럭"}
