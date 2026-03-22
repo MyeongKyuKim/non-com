@@ -15,3 +15,4 @@
 {"id":"000015","file":"images/000015.png","caption":"소화전"}
 {"id":"000016","file":"images/000016.png","caption":"소화전"}
 {"id":"000017","file":"images/000017.png","caption":"계단"}
+{"id":"000018","file":"images/000018.png","caption":"오토바이"}
