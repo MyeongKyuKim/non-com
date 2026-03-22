@@ -10,3 +10,4 @@
 {"id":"000010","file":"images/000010.png","caption":"계단"}
 {"id":"000011","file":"images/000011.png","caption":"버스"}
 {"id":"000012","file":"images/000012.png","caption":"버스"}
+{"id":"000013","file":"images/000013.png","caption":"소화전"}
