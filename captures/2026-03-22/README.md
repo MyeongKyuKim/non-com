@@ -27,3 +27,4 @@
 {"id":"000027","file":"images/000027.png","caption":"오토바이"}
 {"id":"000028","file":"images/000028.png","caption":"오토바이"}
 {"id":"000029","file":"images/000029.png","caption":"오토바이"}
+{"id":"000030","file":"images/000030.png","caption":"오토바이"}
