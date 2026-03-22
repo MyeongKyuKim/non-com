@@ -13,3 +13,4 @@
 {"id":"000013","file":"images/000013.png","caption":"소화전"}
 {"id":"000014","file":"images/000014.png","caption":"소화전"}
 {"id":"000015","file":"images/000015.png","caption":"소화전"}
+{"id":"000016","file":"images/000016.png","caption":"소화전"}
