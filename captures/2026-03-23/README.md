@@ -2,3 +2,4 @@
 {"id":"000002","file":"images/000002.png","caption":"소화전"}
 {"id":"000003","file":"images/000003.png","caption":"소화전"}
 {"id":"000004","file":"images/000004.png","caption":"소화전"}
+{"id":"000005","file":"images/000005.png","caption":"소화전"}
